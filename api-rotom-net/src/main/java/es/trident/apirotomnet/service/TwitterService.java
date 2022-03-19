@@ -42,10 +42,10 @@ public class TwitterService {
 		if (shiny) {
 			pokemonName += "_s";
 			message = "New special acquisition!\n"
-					+ "--["+username+"]--  has achieved a shiny " + pokemon + " and has collected a total of " + cardAmount + " cards!";
+					+ "--["+username+"]--  has acquired a shiny " + pokemon + " and has collected a total of " + cardAmount + " cards!";
 		} else {
 			message = "New acquisition!\n"
-					+ "--["+username+"]--  has achieved a " + pokemon + " and has collected a total of " + cardAmount + " cards!";
+					+ "--["+username+"]--  has acquired a(n) " + pokemon + " and has collected a total of " + cardAmount + " cards!";
 		}
 		
 		default_path = IMAGE_FOLDER.resolve(pokemonName + ".jpg");
