@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.trident.apirotomnet.service.MailService;
 import es.trident.apirotomnet.service.TwitterService;
+import twitter4j.Status;
 import twitter4j.TwitterException;
 
 @RestController
@@ -30,20 +31,24 @@ public class InternalServiceController {
 		String teamData = data.get("teamInformation");
 		String destiny = data.get("mail");
 		mailService.sendMail(teamData, destiny);
-		return new ResponseEntity<String>(teamData, HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	@PostMapping("/{user}/card/{pokemon}/tweet")
 	public ResponseEntity<String> tweeting(@PathVariable String user, @PathVariable String pokemon,
-			@RequestBody int cardAmount) {
+			@RequestBody Map<String, String> data) {
 		ResponseEntity<String> response;
+		Status s;
+
 		try {
-			twitterService.postTweet(user, pokemon, cardAmount);
-			response = new ResponseEntity<String>(HttpStatus.OK);
+			s = twitterService.postTweet(user, pokemon, Boolean.parseBoolean(data.get("shiny")),
+					Integer.parseInt(data.get("cardAmount")));
+			response = ResponseEntity.ok(Long.toString(s.getId()));
 		} catch (TwitterException | IOException e) {
 			// TODO Auto-generated catch block
 			response = new ResponseEntity<String>(HttpStatus.ALREADY_REPORTED);
 		}
+		
 		return response;
 	}
 }
