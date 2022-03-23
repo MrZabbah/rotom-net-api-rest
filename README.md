@@ -3,7 +3,7 @@ La api-REST de RotomNet tiene como objetivo actuar como servicio interno de la a
 
 ## Funcionalidades
 * Enviar la información de un equipo Pokemon pseudoaleatorio a una dirección de correo electrónico especificada.
-* Publicar en la red social Twitter la obtención de una nueva carta tras un combate.
+* Publicar en la red social Twitter la obtención de una nueva carta tras un combate. (Deben proporcionarse claves de autenticación OAuth 1.0a de Twitter en el fichero TwitterService.java)
 
 ## URLs utilizadas
 * [ _/mail_ ]: se realiza una petición de tipo POST en cuyo cuerpo se encuentra tanto el contenido del mensaje como el destinatario. Como consecuencia de esta petición, se envía un correo electrónico desde rotomnetgroup@gmail.com a la dirección especificada, con los datos del equipo listos para ser copiados y pegados en la plantilla de importación de equipos en "Pokemon Showdown".
