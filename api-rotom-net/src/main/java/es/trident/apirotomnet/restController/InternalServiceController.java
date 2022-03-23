@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.trident.apirotomnet.service.MailService;
 import es.trident.apirotomnet.service.TwitterService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
@@ -26,17 +32,28 @@ public class InternalServiceController {
 		this.twitterService = twitterService;
 	}
 
+	@Operation(summary = "Send an email with one pkmnTeam")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Email correctly sent") })
 	@PostMapping("/mail")
-	public ResponseEntity<String> teamMail(@RequestBody Map<String, String> data) {
+	public ResponseEntity<String> teamMail(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Email and Team information", content = @Content(mediaType = "application/json", schema = @Schema(example = "{"
+					+ "mail: string, " + " teamInformation: string" + "}"))) @RequestBody Map<String, String> data) {
 		String teamData = data.get("teamInformation");
 		String destiny = data.get("mail");
+		
 		mailService.sendMail(teamData, destiny);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
+	@Operation(summary = "Post tweet into @RotomNetForum")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Tweet correctly published", content = @Content()),
+			@ApiResponse(responseCode = "208", description = "Tweet duplicated", content = @Content) })
 	@PostMapping("/{user}/card/{pokemon}/tweet")
-	public ResponseEntity<String> tweeting(@PathVariable String user, @PathVariable String pokemon,
-			@RequestBody Map<String, String> data) {
+	public ResponseEntity<String> tweeting(@Parameter(description = "client username") @PathVariable String user,
+			@Parameter(description = "card's pokemon name") @PathVariable String pokemon,
+			@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Rarety and card amount information", content = @Content(mediaType = "application/json", schema = @Schema(example = "{"
+					+ "shiny: string" + " cardAmount: string" + "}"))) @RequestBody Map<String, String> data) {
 		ResponseEntity<String> response;
 		Status s;
 
@@ -48,7 +65,7 @@ public class InternalServiceController {
 			// TODO Auto-generated catch block
 			response = new ResponseEntity<String>(HttpStatus.ALREADY_REPORTED);
 		}
-		
+
 		return response;
 	}
 }

@@ -24,10 +24,10 @@ public class TwitterService {
 		TwitterFactory twitterfactory;
 		
 		cb.setDebugEnabled(true)
-		.setOAuthConsumerKey("---------------------------------")
-		.setOAuthConsumerSecret("------------------------------")
-		.setOAuthAccessToken("---------------------------------")
-		.setOAuthAccessTokenSecret("---------------------------");
+		.setOAuthConsumerKey("-------------------------")
+		.setOAuthConsumerSecret("----------------------")
+		.setOAuthAccessToken("-------------------------")
+		.setOAuthAccessTokenSecret("-------------------");
 		
 		twitterfactory = new TwitterFactory(cb.build());
 		twitter = twitterfactory.getInstance();
