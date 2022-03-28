@@ -1,10 +1,10 @@
 package es.trident.apirotomnet.service;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import twitter4j.Status;
@@ -16,7 +16,7 @@ import twitter4j.conf.ConfigurationBuilder;
 
 @Service
 public class TwitterService {
-	private static final Path IMAGE_FOLDER = Paths.get(System.getProperty("user.dir"), "images");
+	//private static final Path IMAGE_FOLDER = Paths.get(System.getProperty("user.dir"), "images");
 	private Twitter twitter;
 	
 	public TwitterService() throws MalformedURLException {
@@ -24,10 +24,10 @@ public class TwitterService {
 		TwitterFactory twitterfactory;
 		
 		cb.setDebugEnabled(true)
-		.setOAuthConsumerKey("-------------------------")
-		.setOAuthConsumerSecret("----------------------")
-		.setOAuthAccessToken("-------------------------")
-		.setOAuthAccessTokenSecret("-------------------");
+		.setOAuthConsumerKey("----------------------")
+		.setOAuthConsumerSecret("-----------------------------")
+		.setOAuthAccessToken("---------------------------------")
+		.setOAuthAccessTokenSecret("--------------------------------");
 		
 		twitterfactory = new TwitterFactory(cb.build());
 		twitter = twitterfactory.getInstance();
@@ -37,7 +37,6 @@ public class TwitterService {
 		StatusUpdate status;
 		String message;
 		String pokemonName = pokemon;
-		Path default_path;
 		
 		if (shiny) {
 			pokemonName += "_s";
@@ -48,9 +47,9 @@ public class TwitterService {
 					+ "--["+username+"]--  has acquired a(n) " + pokemon + " and has collected a total of " + cardAmount + " cards!";
 		}
 		
-		default_path = IMAGE_FOLDER.resolve(pokemonName + ".jpg");
+		InputStream resource = new ClassPathResource("images/" + pokemonName + ".jpg").getInputStream();		
 		status = new StatusUpdate(message);
-		status.setMedia(new File(default_path.toUri()));
+		status.setMedia(pokemonName, resource);
 		return twitter.updateStatus(status);
 	}
 }
